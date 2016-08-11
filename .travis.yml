@@ -1,0 +1,48 @@
+language: cpp
+
+dist: trusty
+script: ./util/travis/script.sh
+sudo: required
+notifications:
+  email: false
+
+matrix:
+  include:
+    - compiler: gcc-6
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-6
+            - g++-6
+            - libasound2-dev
+            - libxrandr-dev
+            - libcppunit-dev
+      env: COMPILER=g++-6 CXX=g++-6 CC=gcc-6
+      before_script: sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10 && sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
+    - compiler: gcc-5
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - g++-5
+            - libasound2-dev
+            - libxrandr-dev
+            - libcppunit-dev
+      env: COMPILER=g++-5 CXX=g++-5 CC=gcc-5
+      before_script: sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 10 && sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 10
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
+          packages:
+            - clang-3.6
+            - libasound2-dev
+            - libxrandr-dev
+            - libcppunit-dev
+      env: COMPILER=clang++3.6
