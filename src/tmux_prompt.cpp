@@ -123,15 +123,16 @@ static void print_window_status_current_format ()
 		<< std::endl;
 }
 
-static void usage ()
+static void usage (const char *prog_name)
 {
-	std::cerr << "Wrong arguments. " << std::endl << "Usage: tmux_prompt [left,right]" << std::endl;
+	std::cerr << "Wrong arguments. " << std::endl << "Usage: " << prog_name
+		<< " [left,right]" << std::endl;
 }
 
 int main (int argc, const char* argv[])
 {
 	if (argc != 2) {
-		usage();
+		usage(argv[0]);
 		return 1;
 	}
 
@@ -148,7 +149,7 @@ int main (int argc, const char* argv[])
 		print_window_status_current_format();
 	}
 	else {
-		usage();
+		usage(argv[0]);
 		return 2;
 	}
 	return 0;
