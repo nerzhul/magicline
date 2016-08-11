@@ -32,9 +32,27 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <cstring>
+#include <thread>
 #include "time_utils.h"
 
-static const std::string get_sys_load()
+static const int map_sys_load_to_color (const double &load_value)
+{
+	int cpu_number = std::thread::hardware_concurrency();
+	if (load_value < cpu_number * 0.2f) {
+		return 76;
+	}
+	else if (load_value < cpu_number * 0.6f) {
+		return 22;
+	}
+	else if (load_value < cpu_number * 0.8f) {
+		return 208;
+	}
+	else {
+		return 1;
+	}
+}
+
+static const std::string get_sys_load ()
 {
 	static const int loadavg_entries = 3;
 	double loadavg[loadavg_entries];
@@ -46,11 +64,15 @@ static const std::string get_sys_load()
 
 	// @TODO: format colors
 	char load_str_fmt[12]; // 0.0 0.0 0.0\0
-	sprintf(load_str_fmt, "%.1f %.1f %.1f", loadavg[0], loadavg[1], loadavg[2]);
+	sprintf(load_str_fmt, "#[fg=colour%d]%.1f #[fg=colour%d]%.1f #[fg=colour%d]%.1f",
+		map_sys_load_to_color(loadavg[0]), loadavg[0],
+		map_sys_load_to_color(loadavg[1]), loadavg[1],
+		map_sys_load_to_color(loadavg[2]), loadavg[2]
+	);
 	return std::string(load_str_fmt, strlen(load_str_fmt));
 }
 
-static const std::string get_hostname()
+static const std::string get_hostname ()
 {
 	char hostname[64];
 	int res = gethostname(hostname, sizeof(hostname));
@@ -63,7 +85,7 @@ static const std::string get_hostname()
 
 static void print_right ()
 {
-	std::cout << "#[fg=colour233,bg=default,nobold,noitalics,nounderscore] \uE0B2#[fg=colour247,bg=colour233,nobold,noitalics,nounderscore] ⇑  "
+	std::cout << "#[fg=colour233,bg=default,nobold,noitalics,nounderscore] \uE0B2#[fg=colour22,bg=colour233,nobold,noitalics,nounderscore] ⇑  #[fg=colour247]"
 		<< convert_seconds_to_readable_string(get_sys_uptime())
 		<< "#[fg=colour241,bg=colour233,nobold,noitalics,nounderscore] \uE0B3 "
 		<< get_sys_load()
