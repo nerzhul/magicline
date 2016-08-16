@@ -107,6 +107,14 @@ static void print_left ()
 		<< std::endl;
 }
 
+static void print_left_tmux_v1 ()
+{
+	std::cout << "#[fg=colour254]#[bg=colour31]#[bold]#[noitalics]#[nounderscore]#["
+		"fg=colour16]#[bg=colour254]#[bold]#[noitalics]#[nounderscore] #S "
+		"#[fg=colour254]#[bg=colour233]#[nobold]"
+		<< std::endl;
+}
+
 static void print_window_status_format ()
 {
 	std::cout << "#[fg=colour244,bg=colour233,nobold,noitalics,nounderscore]  #I#F "
@@ -126,8 +134,22 @@ static void print_window_status_current_format ()
 static void usage (const char *prog_name)
 {
 	std::cerr << "Wrong arguments. " << std::endl << "Usage: " << prog_name
-		<< " [left,right]" << std::endl;
+		<< " [left,right,left-v1]" << std::endl;
 }
+
+struct OptionMapper
+{
+	const char* option_name;
+	void (*handler) ();
+};
+
+static const OptionMapper option_mappers[] = {
+	{ "right", &print_right },
+	{ "left", &print_left },
+	{ "left-v1", &print_left_tmux_v1 },
+	{ "wsf", &print_window_status_format },
+	{ "wscf", &print_window_status_current_format },
+};
 
 int main (int argc, const char* argv[])
 {
@@ -136,22 +158,16 @@ int main (int argc, const char* argv[])
 		return 1;
 	}
 
-	if (strcmp(argv[1], "right") == 0) {
-		print_right();
+	for (uint8_t i = 0; i < 5; i++) {
+		if (strcmp(argv[1], option_mappers[i].option_name) == 0) {
+			const OptionMapper &om = option_mappers[i];
+			(*om.handler) ();
+			return 0;
+		}
 	}
-	else if (strcmp(argv[1], "left") == 0) {
-		print_left();
-	}
-	else if (strcmp(argv[1], "wsf") == 0) {
-		print_window_status_format();
-	}
-	else if (strcmp(argv[1], "wscf") == 0) {
-		print_window_status_current_format();
-	}
-	else {
-		usage(argv[0]);
-		return 2;
-	}
-	return 0;
+
+	// Unknown option
+	usage(argv[0]);
+	return 2;
 }
 

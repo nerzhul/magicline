@@ -23,3 +23,4 @@ install(TARGETS ${PROJECT_NAME}-tmux
 )
 
 install(FILES "examples/tmux.conf" DESTINATION "${EXAMPLE_CONF_DIR}")
+install(FILES "examples/tmux-v1.conf" DESTINATION "${EXAMPLE_CONF_DIR}")
