@@ -34,6 +34,7 @@
 #include <sstream>
 #include <cstring>
 #include <stdlib.h>
+#include "host_utils.h"
 
 /*
 // normal mode
@@ -100,14 +101,13 @@ void show_prompt ()
 				index += replacement.length();
 			}
 		}
-
-
-
 	}
 
-	printf("%%{\u001B[0;38;5;231;48;5;%s;1m%%} %s %%{\u001B[0;38;5;%s"
+	printf("%%{\u001B[0;38;5;220;48;5;166m%%} %s%s "
+		"%%{\u001B[0;38;5;231;48;5;%s;1m%%} %s %%{\u001B[0;38;5;%s"
 			";48;5;240;1m%%}\uE0B0 %s "
 			"%%{\u001B[0;38;5;240;49;22m%%} %%{\u001B[0m%%}",
+		   getenv("SSH_CONNECTION") ? "\uE0A2 " : "", get_hostname(),
 			(uid == 0 ? "160" : "31"), username, (uid == 0 ? "160" : "31"),
 		   path_cpp11.c_str());
 }

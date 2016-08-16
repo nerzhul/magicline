@@ -29,9 +29,9 @@
 
 
 #include <iostream>
-#include <unistd.h>
 #include <cstring>
 #include <thread>
+#include "host_utils.h"
 #include "time_utils.h"
 
 static const int map_sys_load_to_color (const double &load_value)
@@ -69,17 +69,6 @@ static const char* get_sys_load ()
 		map_sys_load_to_color(loadavg[2]), loadavg[2]
 	);
 	return load_str_fmt;
-}
-
-static const char* get_hostname ()
-{
-	static char hostname[64];
-	int res = gethostname(hostname, sizeof(hostname));
-	if (res != 0) {
-		return "unk hostname";
-	}
-
-	return hostname;
 }
 
 static void print_right ()
