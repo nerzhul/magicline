@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 2.8)
 project(magicline)
 
 set(PROJECT_NAME magicline)
@@ -10,6 +10,8 @@ set(SOURCE_FILES
 	src/tmux_prompt.cpp)
 
 add_executable(${PROJECT_NAME}-tmux ${SOURCE_FILES})
+
+target_link_libraries(${PROJECT_NAME}-tmux rt)
 
 set(BINDIR "${CMAKE_INSTALL_PREFIX}/bin")
 set(DOCDIR "${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME}")
