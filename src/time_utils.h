@@ -32,24 +32,24 @@
 #include <sys/time.h>
 #include <sstream>
 
-static const std::string get_current_day ()
+static const char* get_current_day ()
 {
 	time_t now = time(0);
 	struct tm t;
-	char buf[11];
+	static char buf[11];
 	t = *localtime(&now);
 	strftime(buf, sizeof(buf), "%F", &t);
-	return std::string(buf, strlen(buf));
+	return buf;
 }
 
-static const std::string get_current_hour_min ()
+static const char* get_current_hour_min ()
 {
 	time_t now = time(0);
 	struct tm t;
-	char buf[6];
+	static char buf[6];
 	t = *localtime(&now);
 	strftime(buf, sizeof(buf), "%H:%M", &t);
-	return std::string(buf, strlen(buf));
+	return buf;
 }
 
 static const long get_sys_uptime ()

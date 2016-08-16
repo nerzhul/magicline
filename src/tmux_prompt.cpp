@@ -29,7 +29,6 @@
 
 
 #include <iostream>
-#include <stdlib.h>
 #include <unistd.h>
 #include <cstring>
 #include <thread>
@@ -52,7 +51,7 @@ static const int map_sys_load_to_color (const double &load_value)
 	}
 }
 
-static const std::string get_sys_load ()
+static const char* get_sys_load ()
 {
 	static const int loadavg_entries = 3;
 	double loadavg[loadavg_entries];
@@ -69,10 +68,10 @@ static const std::string get_sys_load ()
 		map_sys_load_to_color(loadavg[1]), loadavg[1],
 		map_sys_load_to_color(loadavg[2]), loadavg[2]
 	);
-	return std::string(load_str_fmt, strlen(load_str_fmt));
+	return load_str_fmt;
 }
 
-static const std::string get_hostname ()
+static const char* get_hostname ()
 {
 	static char hostname[64];
 	int res = gethostname(hostname, sizeof(hostname));
@@ -80,23 +79,19 @@ static const std::string get_hostname ()
 		return "unk hostname";
 	}
 
-	return std::string(hostname, strlen(hostname));
+	return hostname;
 }
 
 static void print_right ()
 {
-	std::cout << "#[fg=colour233,bg=default,nobold,noitalics,nounderscore] \uE0B2#[fg=colour22,bg=colour233,nobold,noitalics,nounderscore] ⇑  #[fg=colour247]"
-		<< convert_seconds_to_readable_string(get_sys_uptime())
-		<< "#[fg=colour241,bg=colour233,nobold,noitalics,nounderscore] \uE0B3 "
-		<< get_sys_load()
-		<< "#[fg=colour236,bg=colour233,nobold,noitalics,nounderscore] \uE0B2#[fg=colour247,bg=colour236,nobold,noitalics,nounderscore] "
-		<< get_current_day()
-		<< "#[fg=colour241,bg=colour236,nobold,noitalics,nounderscore] \uE0B3"
-		<< "#[fg=colour252,bg=colour236,bold,noitalics,nounderscore] ⌚ "
-		<< get_current_hour_min()
-		<< "#[fg=colour252,bg=colour236,nobold,noitalics,nounderscore] \uE0B2#[fg=colour16,bg=colour252,bold,noitalics,nounderscore] "
-		<< get_hostname() << " "
-		<< std::endl;
+	printf("#[fg=colour233,bg=default,nobold,noitalics,nounderscore] \uE0B2#[fg=colour22,bg=colour233,nobold,noitalics,nounderscore] ⇑  #[fg=colour247]");
+	std::cout << convert_seconds_to_readable_string(get_sys_uptime());
+	printf("#[fg=colour241,bg=colour233,nobold,noitalics,nounderscore] \uE0B3 %s"
+		"#[fg=colour236,bg=colour233,nobold,noitalics,nounderscore] \uE0B2#[fg=colour247,bg=colour236,nobold,noitalics,nounderscore] %s"
+		"#[fg=colour241,bg=colour236,nobold,noitalics,nounderscore] \uE0B3"
+		"#[fg=colour252,bg=colour236,bold,noitalics,nounderscore] ⌚ %s"
+		"#[fg=colour252,bg=colour236,nobold,noitalics,nounderscore] \uE0B2#[fg=colour16,bg=colour252,bold,noitalics,nounderscore] %s \n",
+		   get_sys_load(), get_current_day(), get_current_hour_min(), get_hostname());
 }
 
 static void print_left ()
@@ -143,14 +138,17 @@ static const OptionMapper option_mappers[] = {
 
 static void usage (const char *prog_name)
 {
-	std::cerr << "Wrong arguments. " << std::endl << "Usage: " << prog_name << " [";
+	fprintf(stderr, "Wrong arguments.\nUsage: %s [", prog_name);
 
 	for (uint8_t i = 0; i < 5; i++) {
 		const OptionMapper &om = option_mappers[i];
-		std::cerr << om.option_name;
+		fprintf(stderr, "%s", om.option_name);
+		if (i != 4) {
+			fprintf(stderr, ",");
+		}
 	}
 
-	std::cerr << "]" << std::endl;
+	fprintf(stderr, "]\n");
 }
 
 int main (int argc, const char* argv[])

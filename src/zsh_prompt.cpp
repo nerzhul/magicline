@@ -46,7 +46,7 @@
 %{^[[0;38;5;220;48;5;166m%}  Nerz-PC %{^[[0;38;5;166;48;5;31;22m%} %{^[[0;38;5;231;48;5;31;1m%}nerzhul %{^[[0;38;5;31;48;5;240;22m%} %{^[[0;38;5;250;48;5;240m%}⋯ %{^[[0;38;5;245;48;5;240;22m%} %{^[[0;38;5;250;48;5;240m%}lib %{^[[0;38;5;245;48;5;240;22m%} %{^[[0;38;5;250;48;5;240m%}jvm %{^[[0;38;5;245;48;5;240;22m%} %{^[[0;38;5;252;48;5;240;1m%}java-8-openjdk %{^[[0;38;5;240;49;22m%} %{^[[0m%}
 */
 
-int main (int argc, const char* argv[])
+void show_prompt ()
 {
 	struct passwd *pwd;
 	uid_t uid = getuid();
@@ -110,6 +110,27 @@ int main (int argc, const char* argv[])
 			"%%{\u001B[0;38;5;240;49;22m%%} %%{\u001B[0m%%}",
 			(uid == 0 ? "160" : "31"), username, (uid == 0 ? "160" : "31"),
 		   path_cpp11.c_str());
+}
+
+void usage (const char* program_name)
+{
+	printf("Usage: %s [prompt,rprompt]\n", program_name);
+}
+
+int main (int argc, const char* argv[])
+{
+	if (argc != 2) {
+		usage(argv[0]);
+		return 1;
+	}
+
+	if (strcmp(argv[1], "prompt") == 0) {
+		show_prompt();
+	}
+	else {
+		usage(argv[0]);
+		return 2;
+	}
 
 	return 0;
 }
