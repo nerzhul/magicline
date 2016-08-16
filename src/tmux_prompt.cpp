@@ -63,7 +63,7 @@ static const std::string get_sys_load ()
 	}
 
 	// @TODO: format colors
-	char load_str_fmt[12]; // 0.0 0.0 0.0\0
+	static char load_str_fmt[12]; // 0.0 0.0 0.0\0
 	sprintf(load_str_fmt, "#[fg=colour%d]%.1f #[fg=colour%d]%.1f #[fg=colour%d]%.1f",
 		map_sys_load_to_color(loadavg[0]), loadavg[0],
 		map_sys_load_to_color(loadavg[1]), loadavg[1],
@@ -74,7 +74,7 @@ static const std::string get_sys_load ()
 
 static const std::string get_hostname ()
 {
-	char hostname[64];
+	static char hostname[64];
 	int res = gethostname(hostname, sizeof(hostname));
 	if (res != 0) {
 		return "unk hostname";
@@ -101,40 +101,30 @@ static void print_right ()
 
 static void print_left ()
 {
-	std::cout << "#{?client_prefix,#[fg=colour254]#[bg=colour31]#[bold]#[noitalics]#[nounderscore],"
+	printf("#{?client_prefix,#[fg=colour254]#[bg=colour31]#[bold]#[noitalics]#[nounderscore],"
 		"#[fg=colour16]#[bg=colour254]#[bold]#[noitalics]#[nounderscore]} #S "
-		"#{?client_prefix,#[fg=colour31],#[fg=colour254]}#[bg=colour233]#[nobold]"
-		<< std::endl;
+		"#{?client_prefix,#[fg=colour31],#[fg=colour254]}#[bg=colour233]#[nobold]");
 }
 
 static void print_left_tmux_v1 ()
 {
-	std::cout << "#[fg=colour254]#[bg=colour31]#[bold]#[noitalics]#[nounderscore]#["
+	printf("#[fg=colour254]#[bg=colour31]#[bold]#[noitalics]#[nounderscore]#["
 		"fg=colour16]#[bg=colour254]#[bold]#[noitalics]#[nounderscore] #S "
-		"#[fg=colour254]#[bg=colour233]#[nobold]"
-		<< std::endl;
+		"#[fg=colour254]#[bg=colour233]#[nobold]");
 }
 
 static void print_window_status_format ()
 {
-	std::cout << "#[fg=colour244,bg=colour233,nobold,noitalics,nounderscore]  #I#F "
-		"#[fg=colour240,bg=colour233,nobold,noitalics,nounderscore] #[default]#W   "
-		<< std::endl;
+	printf("#[fg=colour244,bg=colour233,nobold,noitalics,nounderscore]  #I#F "
+		"#[fg=colour240,bg=colour233,nobold,noitalics,nounderscore] #[default]#W   ");
 }
 
 static void print_window_status_current_format ()
 {
-	std::cout << "#[fg=colour233,bg=colour31,nobold,noitalics,nounderscore] "
+	printf("#[fg=colour233,bg=colour31,nobold,noitalics,nounderscore] "
 		"#[fg=colour117,bg=colour31,nobold,noitalics,nounderscore]#I#F  "
 		"#[fg=colour231,bg=colour31,bold,noitalics,nounderscore]#W "
-		"#[fg=colour31,bg=colour233,nobold,noitalics,nounderscore] "
-		<< std::endl;
-}
-
-static void usage (const char *prog_name)
-{
-	std::cerr << "Wrong arguments. " << std::endl << "Usage: " << prog_name
-		<< " [left,right,left-v1]" << std::endl;
+		"#[fg=colour31,bg=colour233,nobold,noitalics,nounderscore] ");
 }
 
 struct OptionMapper
@@ -150,6 +140,18 @@ static const OptionMapper option_mappers[] = {
 	{ "wsf", &print_window_status_format },
 	{ "wscf", &print_window_status_current_format },
 };
+
+static void usage (const char *prog_name)
+{
+	std::cerr << "Wrong arguments. " << std::endl << "Usage: " << prog_name << " [";
+
+	for (uint8_t i = 0; i < 5; i++) {
+		const OptionMapper &om = option_mappers[i];
+		std::cerr << om.option_name;
+	}
+
+	std::cerr << "]" << std::endl;
+}
 
 int main (int argc, const char* argv[])
 {

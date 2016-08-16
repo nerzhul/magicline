@@ -6,10 +6,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES
+set(${PROJECT_NAME}_tmux_SOURCE_FILES
 	src/tmux_prompt.cpp)
+set(${PROJECT_NAME}_zsh_SOURCE_FILES
+	src/zsh_prompt.cpp)
 
-add_executable(${PROJECT_NAME}-tmux ${SOURCE_FILES})
+add_executable(${PROJECT_NAME}-tmux ${${PROJECT_NAME}_tmux_SOURCE_FILES})
+add_executable(${PROJECT_NAME}-zsh ${${PROJECT_NAME}_zsh_SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME}-tmux rt)
 
