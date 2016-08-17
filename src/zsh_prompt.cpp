@@ -103,13 +103,18 @@ void show_prompt ()
 		}
 	}
 
-	printf("%%{\u001B[0;38;5;220;48;5;166m%%} %s%s "
-		"%%{\u001B[0;38;5;231;48;5;%s;1m%%} %s %%{\u001B[0;38;5;%s"
+	static char remote_prefix[128] = "\0";
+	if (getenv("SSH_CONNECTION")) {
+		sprintf(remote_prefix, "%%{\u001B[0;38;5;220;48;5;166m%%} \uE0A2 %s ",
+			get_hostname());
+	}
+
+	printf("%s%%{\u001B[0;38;5;231;48;5;%s;1m%%} %s %%{\u001B[0;38;5;%s"
 			";48;5;240;1m%%}\uE0B0 %s "
 			"%%{\u001B[0;38;5;240;49;22m%%} %%{\u001B[0m%%}",
-		   getenv("SSH_CONNECTION") ? "\uE0A2 " : "", get_hostname(),
+			remote_prefix,
 			(uid == 0 ? "160" : "31"), username, (uid == 0 ? "160" : "31"),
-		   path_cpp11.c_str());
+			path_cpp11.c_str());
 }
 
 void usage (const char* program_name)
