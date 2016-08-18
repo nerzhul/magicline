@@ -5,6 +5,7 @@ set(PROJECT_NAME magicline)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
 set(${PROJECT_NAME}_tmux_SOURCE_FILES
 	src/tmux_prompt.cpp)

@@ -28,16 +28,23 @@
 **/
 
 
-#include <iostream>
-#include <cstring>
-#include <thread>
-#include <stdlib.h>
+#include <stdint.h>
+#include <time.h>
+#include <string.h>
+#include <stdio.h>
 #include "host_utils.h"
 #include "time_utils.h"
 
 static const int map_sys_load_to_color (const double &load_value)
 {
-	int cpu_number = std::thread::hardware_concurrency();
+#if defined(__FreeBSD__)
+	long ncpu;
+	size_t len;
+	len = sizeof(long);
+	sysctlbyname("hw.ncpu", &ncpu, &len, NULL, 0);
+#else
+	long cpu_number = sysconf(_SC_NPROCESSORS_ONLN);
+#endif
 	if (load_value < cpu_number * 0.2f) {
 		return 76;
 	}
