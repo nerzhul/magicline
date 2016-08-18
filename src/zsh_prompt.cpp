@@ -121,7 +121,7 @@ void show_prompt ()
 			path_cpp11.c_str());
 }
 
-void show_rprompt() {
+void show_rprompt(const char* last_command_rv) {
 	char git_commit[48];
 	bzero(git_commit, sizeof(git_commit));
 
@@ -196,7 +196,15 @@ void show_rprompt() {
 			}
 		}
 	}
-	std::cout << git_commit << std::endl;
+
+	if (last_command_rv != "0") {
+		printf("%%{\u001B[0;38;5;52;49;22m%%} \uE0B2%%{\u001B[0;38;5;231;48;5;52m%%} %s", last_command_rv);
+	}
+
+	if (strcmp(git_commit, "") != 0) {
+		printf("%%{\u001B[0;38;5;236;48;5;52;22m%%} \uE0B2%%{\u001B[0;38;5;250;48;5;236m%%} "
+				   "\uE0A0 %s %%{\u001B[0m%%}", git_commit);
+	}
 }
 
 void usage (const char* program_name)
@@ -206,16 +214,21 @@ void usage (const char* program_name)
 
 int main (int argc, const char* argv[])
 {
-	if (argc != 2) {
-		usage(argv[0]);
-		return 1;
-	}
-
 	if (strcmp(argv[1], "prompt") == 0) {
+		if (argc != 2) {
+			usage(argv[0]);
+			return 1;
+		}
+
 		show_prompt();
 	}
 	else if (strcmp(argv[1], "rprompt") == 0) {
-		show_rprompt();
+		if (argc != 3) {
+			usage(argv[0]);
+			return 1;
+		}
+
+		show_rprompt(argv[2]);
 	}
 	else {
 		usage(argv[0]);
