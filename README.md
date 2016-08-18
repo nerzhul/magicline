@@ -25,3 +25,7 @@ Just copy the content at the end of your __~/.zshrc__, __/etc/zsh/zshrc__ or __/
 You will find an example configuration for tmux in __examples/__ directory.
 
 Just copy it to __~/.tmux.conf__, __/etc/tmux.conf__ or __/usr/local/etc/tmux.conf__ and enjoy.
+
+## Screenshots
+
+![powerline+mux](https://lut.im/DmzvDlaOxd/cQenonLp95Yfnn55.png "Powerline + tmux")
