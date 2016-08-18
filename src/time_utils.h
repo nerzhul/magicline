@@ -30,7 +30,7 @@
 #pragma once
 
 #include <sys/time.h>
-#include <sstream>
+#include <stdlib.h>
 
 static void get_current_day (char* buf, size_t s)
 {
@@ -55,7 +55,7 @@ static const long get_sys_uptime ()
 	return(sp.tv_sec);
 }
 
-static const std::string convert_seconds_to_readable_string(uint32_t t)
+static void convert_seconds_to_readable_string(uint32_t t, char* buf, size_t s)
 {
 	uint32_t seconds = t % 60;
 	t -= seconds; t /= 60; // Convert time to minutes
@@ -66,23 +66,5 @@ static const std::string convert_seconds_to_readable_string(uint32_t t)
 	uint32_t hours = t % 24;
 	t -= hours; t /= 24; // Convert time to days
 
-	std::stringstream ss;
-
-	if (t > 0) {
-		ss << t << "d ";
-	}
-
-	if (hours > 0) {
-		ss << hours << "h ";
-	}
-
-	if (minutes > 0) {
-		ss << minutes << "m ";
-	}
-
-	if (seconds > 0) {
-		ss << seconds << "s";
-	}
-
-	return ss.str();
+	sprintf(buf, "%dd %dh %dm %ds", t, hours, minutes, seconds);
 }

@@ -76,20 +76,21 @@ static void print_right ()
 	static char day_buf[11];
 	static char hour_buf[6];
 	static char hostname_buf[64];
+	static char uptime_buf[32];
 
 	get_sys_load(load_buf, sizeof(load_buf));
 	get_current_day(day_buf, sizeof(day_buf));
 	get_current_hour_min(hour_buf, sizeof(hour_buf));
 	get_hostname(hostname_buf, sizeof(hostname_buf));
+	convert_seconds_to_readable_string(get_sys_uptime(), uptime_buf, sizeof(uptime_buf));
 
-	printf("#[fg=colour233,bg=default,nobold,noitalics,nounderscore] \uE0B2#[fg=colour22,bg=colour233,nobold,noitalics,nounderscore] ⇑  #[fg=colour247]");
-	std::cout << convert_seconds_to_readable_string(get_sys_uptime());
-	printf("#[fg=colour241,bg=colour233,nobold,noitalics,nounderscore] \uE0B3 %s"
+	printf("#[fg=colour233,bg=default,nobold,noitalics,nounderscore] \uE0B2#[fg=colour22,bg=colour233,nobold,noitalics,nounderscore] ⇑  #[fg=colour247]%s"
+		"#[fg=colour241,bg=colour233,nobold,noitalics,nounderscore] \uE0B3 %s"
 		"#[fg=colour236,bg=colour233,nobold,noitalics,nounderscore] \uE0B2#[fg=colour247,bg=colour236,nobold,noitalics,nounderscore] %s"
 		"#[fg=colour241,bg=colour236,nobold,noitalics,nounderscore] \uE0B3"
 		"#[fg=colour252,bg=colour236,bold,noitalics,nounderscore] ⌚ %s"
 		"#[fg=colour252,bg=colour236,nobold,noitalics,nounderscore] \uE0B2#[fg=colour16,bg=colour252,bold,noitalics,nounderscore] %s \n",
-		   load_buf, day_buf, hour_buf, hostname_buf);
+		   uptime_buf, load_buf, day_buf, hour_buf, hostname_buf);
 }
 
 static void print_left ()
