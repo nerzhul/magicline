@@ -206,8 +206,9 @@ void show_rprompt(const char* last_command_rv) {
 
 	if (strcmp(git_commit, "") != 0) {
 		printf("\uE0B2%%{\u001B[0;38;5;250;48;5;236m%%} "
-				   "\uE0A0 %s %%{\u001B[0m%%}", git_commit);
+				   "\uE0A0 %s ", git_commit);
 	}
+	printf("%%{\u001B[0m%%}");
 }
 
 void usage (const char* program_name)
