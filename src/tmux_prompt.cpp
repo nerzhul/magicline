@@ -31,6 +31,7 @@
 #include <iostream>
 #include <cstring>
 #include <thread>
+#include <stdlib.h>
 #include "host_utils.h"
 #include "time_utils.h"
 
@@ -51,28 +52,36 @@ static const int map_sys_load_to_color (const double &load_value)
 	}
 }
 
-static const char* get_sys_load ()
+static void get_sys_load (char *buf, size_t s)
 {
 	static const int loadavg_entries = 3;
 	double loadavg[loadavg_entries];
 
 	int res = getloadavg(loadavg, loadavg_entries);
 	if (res < 0) {
-		return "unknown";
+		sprintf(buf, "unknown");
+		return;
 	}
 
-	// @TODO: format colors
-	static char load_str_fmt[12]; // 0.0 0.0 0.0\0
-	sprintf(load_str_fmt, "#[fg=colour%d]%.1f #[fg=colour%d]%.1f #[fg=colour%d]%.1f",
+	sprintf(buf, "#[fg=colour%d]%.1f #[fg=colour%d]%.1f #[fg=colour%d]%.1f",
 		map_sys_load_to_color(loadavg[0]), loadavg[0],
 		map_sys_load_to_color(loadavg[1]), loadavg[1],
 		map_sys_load_to_color(loadavg[2]), loadavg[2]
 	);
-	return load_str_fmt;
 }
 
 static void print_right ()
 {
+	static char load_buf[12];
+	static char day_buf[11];
+	static char hour_buf[6];
+	static char hostname_buf[64];
+
+	get_sys_load(load_buf, sizeof(load_buf));
+	get_current_day(day_buf, sizeof(day_buf));
+	get_current_hour_min(hour_buf, sizeof(hour_buf));
+	get_hostname(hostname_buf, sizeof(hostname_buf));
+
 	printf("#[fg=colour233,bg=default,nobold,noitalics,nounderscore] \uE0B2#[fg=colour22,bg=colour233,nobold,noitalics,nounderscore] ⇑  #[fg=colour247]");
 	std::cout << convert_seconds_to_readable_string(get_sys_uptime());
 	printf("#[fg=colour241,bg=colour233,nobold,noitalics,nounderscore] \uE0B3 %s"
@@ -80,7 +89,7 @@ static void print_right ()
 		"#[fg=colour241,bg=colour236,nobold,noitalics,nounderscore] \uE0B3"
 		"#[fg=colour252,bg=colour236,bold,noitalics,nounderscore] ⌚ %s"
 		"#[fg=colour252,bg=colour236,nobold,noitalics,nounderscore] \uE0B2#[fg=colour16,bg=colour252,bold,noitalics,nounderscore] %s \n",
-		   get_sys_load(), get_current_day(), get_current_hour_min(), get_hostname());
+		   load_buf, day_buf, hour_buf, hostname_buf);
 }
 
 static void print_left ()

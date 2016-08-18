@@ -31,13 +31,10 @@
 
 #include <unistd.h>
 
-static const char* get_hostname ()
+static void get_hostname (char* buf, size_t s)
 {
-	static char hostname[64];
-	int res = gethostname(hostname, sizeof(hostname));
+	int res = gethostname(buf, s);
 	if (res != 0) {
-		return "unk hostname";
+		sprintf(buf, "unk hostname");
 	}
-
-	return hostname;
 }
