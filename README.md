@@ -14,6 +14,12 @@ make
 sudo make install
 ```
 
+## ZSH configuration
+
+You will find the shell configuration for zsh in __examples__ directory.
+
+Just copy the content at the end of your __~/.zshrc__, __/etc/zsh/zshrc__ or __/usr/local/etc/zshrc__ and enjoy.
+
 ## Tmux configuration
 
 You will find an example configuration for tmux in __examples/__ directory.
