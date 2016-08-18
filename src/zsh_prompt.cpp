@@ -35,7 +35,6 @@
 #include <cstring>
 #include <stdlib.h>
 #include <regex.h>
-#include <git2/types.h>
 #include "host_utils.h"
 
 /*
