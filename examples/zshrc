@@ -1,1 +1,2 @@
 export PROMPT='$(magicline-zsh prompt)'
+export RPROMPT='$(magicline-zsh rprompt $?)'

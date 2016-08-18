@@ -197,12 +197,16 @@ void show_rprompt(const char* last_command_rv) {
 		}
 	}
 
-	if (last_command_rv != "0") {
-		printf("%%{\u001B[0;38;5;52;49;22m%%} \uE0B2%%{\u001B[0;38;5;231;48;5;52m%%} %s", last_command_rv);
+	if (strcmp(last_command_rv, "0") != 0) {
+		printf("%%{\u001B[0;38;5;52;49;22m%%} \uE0B2%%{\u001B[0;38;5;231;48;5;52m%%} %s"
+				   "%%{\u001B[0;38;5;236;48;5;52;22m%%} ", last_command_rv);
+	}
+	else {
+		printf("%%{\u001B[0;38;5;236;49;22m%%} ");
 	}
 
 	if (strcmp(git_commit, "") != 0) {
-		printf("%%{\u001B[0;38;5;236;48;5;52;22m%%} \uE0B2%%{\u001B[0;38;5;250;48;5;236m%%} "
+		printf("\uE0B2%%{\u001B[0;38;5;250;48;5;236m%%} "
 				   "\uE0A0 %s %%{\u001B[0m%%}", git_commit);
 	}
 }
