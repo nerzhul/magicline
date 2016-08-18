@@ -34,6 +34,8 @@
 #include <sstream>
 #include <cstring>
 #include <stdlib.h>
+#include <regex.h>
+#include <git2/types.h>
 #include "host_utils.h"
 
 /*
@@ -119,6 +121,84 @@ void show_prompt ()
 			path_cpp11.c_str());
 }
 
+void show_rprompt() {
+	char git_commit[48];
+	bzero(git_commit, sizeof(git_commit));
+
+	// Search for git commit
+	static char path_buf[MAXPATHLEN];
+	char* path = getcwd(path_buf, sizeof(path_buf));
+	if (path != NULL) {
+		std::string path_str(path, strlen(path));
+		uint16_t slash_count = 0;
+		for (char *p = path; *p; ++p) {
+			if (*p == '/') {
+				slash_count++;
+			}
+		}
+
+		// Search .git/HEAD in current folder and upper
+		for (uint16_t i = 0; i < slash_count; i++) {
+			std::string git_path = path_str;
+			for (uint16_t j = 0; j < i; j++) {
+				git_path += "/..";
+			}
+
+			git_path +=  "/.git/HEAD";
+
+			if (access(git_path.c_str(), F_OK) != -1) {
+				FILE* f = fopen(git_path.c_str(), "r");
+				if (f == NULL) {
+					break;
+				}
+
+				char* line_buf;
+				size_t line_len;
+				ssize_t read_len;
+				// Read first line
+				if ((read_len = getline(&line_buf, &line_len, f)) != -1) {
+					// First check it's a git branch name
+					regex_t regex;
+					int regex_rs = regcomp(&regex, "^ref: refs/heads/(.+)\n", REG_EXTENDED);
+					if (regex_rs != 0) {
+						fprintf(stderr, "Non compilable regex for git!\n");
+						fclose(f);
+						break;
+					}
+
+					size_t max_groups = 2;
+					regmatch_t matches[max_groups];
+					regex_rs = regexec(&regex, (const char*)line_buf, max_groups, matches, 0);
+					// Now verify it's a branch
+					if (regex_rs == REG_NOERROR) {
+						for (uint8_t g = 1; g < max_groups && matches[g].rm_so != -1; g++) {
+							int ncpy_char = matches[g].rm_eo - matches[g].rm_so;
+
+							// We shoud not copy more than 127 characters to have a consistent result
+							if (ncpy_char > 47) {
+								ncpy_char = 47;
+							}
+
+							strncpy(git_commit, line_buf + matches[g].rm_so, (size_t) ncpy_char);
+						}
+					}
+					// This is a commit ID
+					else if (read_len == 41) {
+						strncpy(git_commit, line_buf, 7);
+					}
+					regfree(&regex);
+				}
+
+				fclose(f);
+
+				// Leave the git search loop
+				break;
+			}
+		}
+	}
+	std::cout << git_commit << std::endl;
+}
+
 void usage (const char* program_name)
 {
 	printf("Usage: %s [prompt,rprompt]\n", program_name);
@@ -133,6 +213,9 @@ int main (int argc, const char* argv[])
 
 	if (strcmp(argv[1], "prompt") == 0) {
 		show_prompt();
+	}
+	else if (strcmp(argv[1], "rprompt") == 0) {
+		show_rprompt();
 	}
 	else {
 		usage(argv[0]);
