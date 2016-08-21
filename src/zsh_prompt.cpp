@@ -219,6 +219,7 @@ int main (int argc, const char* argv[])
 		}
 
 		show_prompt();
+		return 0;
 	}
 	else if (strcmp(argv[1], "rprompt") == 0) {
 		if (argc != 3) {
@@ -227,12 +228,9 @@ int main (int argc, const char* argv[])
 		}
 
 		show_rprompt(argv[2]);
+		return 0;
 	}
-	else {
-		usage(argv[0]);
-		return 2;
-	}
-
-	return 0;
+	usage(argv[0]);
+	return 2;
 }
 
