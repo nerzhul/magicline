@@ -56,8 +56,9 @@ void show_prompt ()
 		username = (char*) default_username;
 	}
 
-	char path_buf[MAXPATHLEN];
+	char path_buf[MAXPATHLEN] = {0};
 	char* path = getcwd(path_buf, sizeof(path_buf));
+
 
 	std::string path_cpp11 = "?";
 	if (path != NULL) {
@@ -98,9 +99,9 @@ void show_prompt ()
 		}
 	}
 
-	static char remote_prefix[128] = "";
+	char remote_prefix[128] = {0};
 	if (getenv("SSH_CONNECTION")) {
-		static char hostname_buf[64];
+		char hostname_buf[64] = {0};
 		get_hostname(hostname_buf, sizeof(hostname_buf));
 		snprintf(remote_prefix, sizeof(hostname_buf) * sizeof(char),
 			"%%{\u001B[0;38;5;220;48;5;166m%%} \uE0A2 %s ",
@@ -116,11 +117,10 @@ void show_prompt ()
 }
 
 void show_rprompt(const char* last_command_rv) {
-	char git_commit[48];
-	bzero(git_commit, sizeof(git_commit));
+	char git_commit[48] = {0};
 
 	// Search for git commit
-	static char path_buf[MAXPATHLEN];
+	char path_buf[MAXPATHLEN] = {0};
 	char* path = getcwd(path_buf, sizeof(path_buf));
 	if (path != NULL) {
 		std::string path_str(path, strlen(path));
