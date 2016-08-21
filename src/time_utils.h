@@ -66,5 +66,5 @@ static void convert_seconds_to_readable_string(uint32_t t, char* buf, size_t s)
 	uint32_t hours = t % 24;
 	t -= hours; t /= 24; // Convert time to days
 
-	sprintf(buf, "%dd %dh %dm %ds", t, hours, minutes, seconds);
+	snprintf(buf, s, "%dd %dh %dm %ds", t, hours, minutes, seconds);
 }

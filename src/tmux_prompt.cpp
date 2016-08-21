@@ -72,11 +72,11 @@ static void get_sys_load (char *buf, size_t s)
 
 	int res = getloadavg(loadavg, loadavg_entries);
 	if (res < 0) {
-		sprintf(buf, "unknown");
+		snprintf(buf, s, "unknown");
 		return;
 	}
 
-	sprintf(buf, "#[fg=colour%d]%.1f #[fg=colour%d]%.1f #[fg=colour%d]%.1f",
+	snprintf(buf, s, "#[fg=colour%d]%.1f #[fg=colour%d]%.1f #[fg=colour%d]%.1f",
 		map_sys_load_to_color(loadavg[0]), loadavg[0],
 		map_sys_load_to_color(loadavg[1]), loadavg[1],
 		map_sys_load_to_color(loadavg[2]), loadavg[2]

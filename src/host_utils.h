@@ -35,6 +35,6 @@ static void get_hostname (char* buf, size_t s)
 {
 	int res = gethostname(buf, s);
 	if (res != 0) {
-		sprintf(buf, "unk hostname");
+		snprintf(buf, s, "unk hostname");
 	}
 }

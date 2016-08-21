@@ -102,7 +102,8 @@ void show_prompt ()
 	if (getenv("SSH_CONNECTION")) {
 		static char hostname_buf[64];
 		get_hostname(hostname_buf, sizeof(hostname_buf));
-		sprintf(remote_prefix, "%%{\u001B[0;38;5;220;48;5;166m%%} \uE0A2 %s ",
+		snprintf(remote_prefix, sizeof(hostname_buf) * sizeof(char),
+			"%%{\u001B[0;38;5;220;48;5;166m%%} \uE0A2 %s ",
 			hostname_buf);
 	}
 
