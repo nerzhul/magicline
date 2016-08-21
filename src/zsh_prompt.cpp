@@ -208,7 +208,7 @@ void show_rprompt(const char* last_command_rv) {
 
 void usage (const char* program_name)
 {
-	printf("Usage: %s [prompt,rprompt]\n", program_name);
+	printf("Usage: %s [prompt,rprompt $?]\n", program_name);
 }
 
 int main (int argc, const char* argv[])
