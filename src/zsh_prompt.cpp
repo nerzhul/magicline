@@ -30,23 +30,17 @@
 #include <pwd.h>
 #include <unistd.h>
 #include <sys/param.h>
+
+#if defined(__FreeBSD__)
+	#define _WITH_GETLINE
+	#include <stdio.h>
+#endif
+
 #include <iostream>
-#include <sstream>
 #include <cstring>
 #include <stdlib.h>
 #include <regex.h>
 #include "host_utils.h"
-
-/*
-// normal mode
-%{^[[0;38;5;231;48;5;31;1m%} nerzhul %{^[[0;38;5;31;48;5;240;22m%} %{^[[0;38;5;252;48;5;240;1m%}~ %{^[[0;38;5;240;49;22m%} %{^[[0m%}
-// ssh mode
-%{^[[0;38;5;220;48;5;166m%}  Nerz-PC %{^[[0;38;5;166;48;5;31;22m%} %{^[[0;38;5;231;48;5;31;1m%}nerzhul %{^[[0;38;5;31;48;5;240;22m%} %{^[[0;38;5;252;48;5;240;1m%}~ %{^[[0;38;5;240;49;22m%} %{^[[0m%}
-// root mode
-%{^[[0;38;5;231;48;5;160;1m%} root %{^[[0;38;5;160;48;5;240;22m%} %{^[[0;38;5;252;48;5;240;1m%}~ %{^[[0;38;5;240;49;22m%} %{^[[0m%}
-// long path
-%{^[[0;38;5;220;48;5;166m%}  Nerz-PC %{^[[0;38;5;166;48;5;31;22m%} %{^[[0;38;5;231;48;5;31;1m%}nerzhul %{^[[0;38;5;31;48;5;240;22m%} %{^[[0;38;5;250;48;5;240m%}⋯ %{^[[0;38;5;245;48;5;240;22m%} %{^[[0;38;5;250;48;5;240m%}lib %{^[[0;38;5;245;48;5;240;22m%} %{^[[0;38;5;250;48;5;240m%}jvm %{^[[0;38;5;245;48;5;240;22m%} %{^[[0;38;5;252;48;5;240;1m%}java-8-openjdk %{^[[0;38;5;240;49;22m%} %{^[[0m%}
-*/
 
 void show_prompt ()
 {
@@ -169,7 +163,7 @@ void show_rprompt(const char* last_command_rv) {
 					regmatch_t matches[max_groups];
 					regex_rs = regexec(&regex, (const char*)line_buf, max_groups, matches, 0);
 					// Now verify it's a branch
-					if (regex_rs == REG_NOERROR) {
+					if (regex_rs == 0) {
 						for (uint8_t g = 1; g < max_groups && matches[g].rm_so != -1; g++) {
 							int ncpy_char = matches[g].rm_eo - matches[g].rm_so;
 

@@ -32,16 +32,22 @@
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
+
+#if defined(__FreeBSD__)
+	#include <sys/param.h>
+	#include <sys/sysctl.h>
+#endif
+
 #include "host_utils.h"
 #include "time_utils.h"
 
 static const int map_sys_load_to_color (const double &load_value)
 {
 #if defined(__FreeBSD__)
-	long ncpu;
+	long cpu_number;
 	size_t len;
 	len = sizeof(long);
-	sysctlbyname("hw.ncpu", &ncpu, &len, NULL, 0);
+	sysctlbyname("hw.ncpu", &cpu_number, &len, NULL, 0);
 #else
 	long cpu_number = sysconf(_SC_NPROCESSORS_ONLN);
 #endif
