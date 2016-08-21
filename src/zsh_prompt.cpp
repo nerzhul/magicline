@@ -213,6 +213,11 @@ void usage (const char* program_name)
 
 int main (int argc, const char* argv[])
 {
+	if (argc == 1) {
+		usage(argv[0]);
+		return 1;
+	}
+
 	if (strcmp(argv[1], "prompt") == 0) {
 		if (argc != 2) {
 			usage(argv[0]);
