@@ -1,2 +1,4 @@
+export LANG=en_US.UTF-8
+setopt PROMPT_SUBST
 export PROMPT='$(magicline-zsh prompt)'
 export RPROMPT='$(magicline-zsh rprompt $?)'
