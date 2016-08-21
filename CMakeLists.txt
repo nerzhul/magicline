@@ -18,14 +18,14 @@ add_executable(${PROJECT_NAME}-zsh ${${PROJECT_NAME}_zsh_SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME}-tmux rt)
 
 set(BINDIR "${CMAKE_INSTALL_PREFIX}/bin")
-set(DOCDIR "${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME}")
-set(EXAMPLE_CONF_DIR ${DOCDIR})
+set(SHAREDIR "${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}")
+set(EXAMPLE_CONF_DIR ${SHAREDIR})
 
 install(TARGETS ${PROJECT_NAME}-tmux ${PROJECT_NAME}-zsh
 	RUNTIME DESTINATION ${BINDIR}
 	BUNDLE DESTINATION .
 )
 
-install(FILES "examples/zshrc" DESTINATION "${EXAMPLE_CONF_DIR}")
-install(FILES "examples/tmux.conf" DESTINATION "${EXAMPLE_CONF_DIR}")
-install(FILES "examples/tmux-v1.conf" DESTINATION "${EXAMPLE_CONF_DIR}")
+install(FILES "share/zshrc" DESTINATION "${EXAMPLE_CONF_DIR}")
+install(FILES "share/tmux.conf" DESTINATION "${EXAMPLE_CONF_DIR}")
+install(FILES "share/tmux-v1.conf" DESTINATION "${EXAMPLE_CONF_DIR}")
