@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
 set(${PROJECT_NAME}_tmux_SOURCE_FILES
-	src/tmux_prompt.cpp)
+	src/tmux_prompt.c)
 set(${PROJECT_NAME}_zsh_SOURCE_FILES
 	src/zsh_prompt.cpp)
 

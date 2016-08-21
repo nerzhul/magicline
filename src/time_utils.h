@@ -29,7 +29,7 @@
 
 #pragma once
 
-#include <sys/time.h>
+#include <time.h>
 #include <stdlib.h>
 
 static void get_current_day (char* buf, size_t s)

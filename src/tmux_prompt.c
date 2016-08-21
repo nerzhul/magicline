@@ -28,6 +28,8 @@
 **/
 
 
+#define _DEFAULT_SOURCE
+
 #include <stdint.h>
 #include <time.h>
 #include <string.h>
@@ -41,7 +43,7 @@
 #include "host_utils.h"
 #include "time_utils.h"
 
-static const int map_sys_load_to_color (const double &load_value)
+const int map_sys_load_to_color (const double *load_value)
 {
 #if defined(__FreeBSD__)
 	long cpu_number;
@@ -51,13 +53,13 @@ static const int map_sys_load_to_color (const double &load_value)
 #else
 	long cpu_number = sysconf(_SC_NPROCESSORS_ONLN);
 #endif
-	if (load_value < cpu_number * 0.2f) {
+	if (*load_value < cpu_number * 0.2f) {
 		return 76;
 	}
-	else if (load_value < cpu_number * 0.6f) {
+	else if (*load_value < cpu_number * 0.6f) {
 		return 22;
 	}
-	else if (load_value < cpu_number * 0.8f) {
+	else if (*load_value < cpu_number * 0.8f) {
 		return 208;
 	}
 	else {
@@ -77,9 +79,9 @@ static void get_sys_load (char *buf, size_t s)
 	}
 
 	snprintf(buf, s, "#[fg=colour%d]%.1f #[fg=colour%d]%.1f #[fg=colour%d]%.1f",
-		map_sys_load_to_color(loadavg[0]), loadavg[0],
-		map_sys_load_to_color(loadavg[1]), loadavg[1],
-		map_sys_load_to_color(loadavg[2]), loadavg[2]
+		map_sys_load_to_color(&loadavg[0]), loadavg[0],
+		map_sys_load_to_color(&loadavg[1]), loadavg[1],
+		map_sys_load_to_color(&loadavg[2]), loadavg[2]
 	);
 }
 
@@ -140,7 +142,7 @@ struct OptionMapper
 	void (*handler) ();
 };
 
-static const OptionMapper option_mappers[] = {
+static const struct OptionMapper option_mappers[] = {
 	{ "right", &print_right },
 	{ "left", &print_left },
 	{ "left-v1", &print_left_tmux_v1 },
@@ -153,8 +155,7 @@ static void usage (const char *prog_name)
 	fprintf(stderr, "Wrong arguments.\nUsage: %s [", prog_name);
 
 	for (uint8_t i = 0; i < 5; i++) {
-		const OptionMapper &om = option_mappers[i];
-		fprintf(stderr, "%s", om.option_name);
+		fprintf(stderr, "%s", option_mappers[i].option_name);
 		if (i != 4) {
 			fprintf(stderr, ",");
 		}
@@ -172,8 +173,7 @@ int main (int argc, const char* argv[])
 
 	for (uint8_t i = 0; i < 5; i++) {
 		if (strcmp(argv[1], option_mappers[i].option_name) == 0) {
-			const OptionMapper &om = option_mappers[i];
-			(*om.handler) ();
+			(*option_mappers[i].handler) ();
 			return 0;
 		}
 	}
