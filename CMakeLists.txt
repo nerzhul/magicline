@@ -15,7 +15,9 @@ set(${PROJECT_NAME}_zsh_SOURCE_FILES
 add_executable(${PROJECT_NAME}-tmux ${${PROJECT_NAME}_tmux_SOURCE_FILES})
 add_executable(${PROJECT_NAME}-zsh ${${PROJECT_NAME}_zsh_SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME}-tmux rt)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL OpenBSD)
+	target_link_libraries(${PROJECT_NAME}-tmux rt)
+endif()
 
 set(BINDIR "${CMAKE_INSTALL_PREFIX}/bin")
 set(SHAREDIR "${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}")
