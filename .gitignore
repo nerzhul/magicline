@@ -4,3 +4,4 @@ out
 gen
 bin
 build
+src/project_defines.h
