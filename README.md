@@ -16,15 +16,24 @@ sudo make install
 
 ## ZSH configuration
 
-You will find the shell configuration for zsh in __examples__ directory.
+Just copy the following line at the end of your __~/.zshrc__, __/etc/zsh/zshrc__ or __/usr/local/etc/zshrc__ and enjoy.
 
-Just copy the content at the end of your __~/.zshrc__, __/etc/zsh/zshrc__ or __/usr/local/etc/zshrc__ and enjoy.
+```
+source /usr/local/share/magicline/zshrc
+```
 
 ## Tmux configuration
 
-You will find an example configuration for tmux in __examples/__ directory.
+Just source the followine line to __~/.tmux.conf__, __/etc/tmux.conf__ or __/usr/local/etc/tmux.conf__.
 
-Just copy it to __~/.tmux.conf__, __/etc/tmux.conf__ or __/usr/local/etc/tmux.conf__.
+```
+source /usr/local/share/magicline/tmux.conf
+```
+
+If you have tmux v1 you should use
+```
+source /usr/local/share/magicline/tmux-v1.conf
+```
 
 Ensure you current shell has a LANG environment variable with UTF-8 support.
 
