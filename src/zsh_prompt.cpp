@@ -40,6 +40,8 @@
 #include <cstring>
 #include <stdlib.h>
 #include <regex.h>
+
+#include "project_defines.h"
 #include "host_utils.h"
 
 void show_prompt ()
@@ -206,9 +208,14 @@ void show_rprompt(const char* last_command_rv) {
 	printf("%%{\u001B[0m%%}");
 }
 
+void show_version ()
+{
+	printf("version: %s-%s\n", PROJECT_VERSION, PROJECT_VERSION_COMMIT);
+}
+
 void usage (const char* program_name)
 {
-	printf("Usage: %s [prompt,rprompt $?]\n", program_name);
+	printf("Usage: %s [prompt,rprompt $?,version]\n", program_name);
 }
 
 int main (int argc, const char* argv[])
@@ -234,6 +241,10 @@ int main (int argc, const char* argv[])
 		}
 
 		show_rprompt(argv[2]);
+		return 0;
+	}
+	else if (strcmp(argv[1], "version") == 0) {
+		show_version();
 		return 0;
 	}
 	usage(argv[0]);

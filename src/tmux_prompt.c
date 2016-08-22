@@ -40,6 +40,7 @@
 	#include <sys/sysctl.h>
 #endif
 
+#include "project_defines.h"
 #include "host_utils.h"
 #include "time_utils.h"
 
@@ -136,6 +137,11 @@ static void print_window_status_current_format ()
 		"#[fg=colour31,bg=colour233,nobold,noitalics,nounderscore] ");
 }
 
+static void print_version ()
+{
+	printf("version: %s-%s\n", PROJECT_VERSION, PROJECT_VERSION_COMMIT);
+}
+
 struct OptionMapper
 {
 	const char* option_name;
@@ -146,6 +152,7 @@ static const struct OptionMapper option_mappers[] = {
 	{ "right", &print_right },
 	{ "left", &print_left },
 	{ "left-v1", &print_left_tmux_v1 },
+	{ "version", &print_version },
 	{ "wsf", &print_window_status_format },
 	{ "wscf", &print_window_status_current_format },
 };

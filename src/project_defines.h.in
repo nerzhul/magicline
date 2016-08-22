@@ -30,3 +30,4 @@
 #pragma once
 
 #cmakedefine PROJECT_VERSION "@PROJECT_VERSION@"
+#cmakedefine PROJECT_VERSION_COMMIT "@PROJECT_VERSION_COMMIT@"
