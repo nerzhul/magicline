@@ -9,6 +9,12 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
 execute_process(COMMAND git describe --abbrev=0 --tags OUTPUT_VARIABLE PROJECT_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
 execute_process(COMMAND git rev-parse HEAD OUTPUT_VARIABLE PROJECT_VERSION_COMMIT OUTPUT_STRIP_TRAILING_WHITESPACE)
+if (PROJECT_VERSION STREQUAL "")
+	set(PROJECT_VERSION "0.9.8")
+endif()
+if (PROJECT_VERSION_COMMIT STREQUAL "")
+	set(PROJECT_VERSION_COMMIT "unk")
+endif()
 
 configure_file(src/project_defines.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/project_defines.h)
 
