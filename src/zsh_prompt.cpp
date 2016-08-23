@@ -166,9 +166,9 @@ void show_rprompt(const char* last_command_rv) {
 					break;
 				}
 
-				char* line_buf;
-				size_t line_len;
-				ssize_t read_len;
+				char* line_buf = NULL;
+				size_t line_len = 0;
+				ssize_t read_len = 0;
 				// Read first line
 				if ((read_len = getline(&line_buf, &line_len, f)) != -1) {
 					// First check it's a git branch name
