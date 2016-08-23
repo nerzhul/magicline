@@ -77,6 +77,8 @@ void show_prompt ()
 				// Path start with / and move chars after $PATH to ~ + 1
 				path[0] = '~';
 				memmove(&path[1], &path[home_dir_len], path_len - home_dir_len);
+				// cleanup
+				bzero(&path[path_len - home_dir_len + 1], home_dir_len - 1);
 			}
 		}
 
