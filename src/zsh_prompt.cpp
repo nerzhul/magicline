@@ -64,6 +64,22 @@ void show_prompt ()
 
 	std::string path_cpp11 = "?";
 	if (path != NULL) {
+		// Replace $HOME with ~ if present in path
+		if (const char* home_dir = getenv("HOME")) {
+			size_t home_dir_len = strlen(home_dir);
+			size_t path_len = strlen(path);
+			// First verify if we are exactly in $HOME
+			if (path_len == home_dir_len && strcmp(path, home_dir) == 0) {
+				path = (char *) "~";
+			// Now if current length is greater than $HOME and we are in $HOME
+			} else if (path_len > home_dir_len &&
+					   strncmp(path, home_dir, home_dir_len) == 0) {
+				// Path start with / and move chars after $PATH to ~ + 1
+				path[0] = '~';
+				memmove(&path[1], &path[home_dir_len], path_len - home_dir_len);
+			}
+		}
+
 		uint16_t slash_count = 0;
 		for (char *p = path; *p; ++p) {
 			if (*p == '/') {
