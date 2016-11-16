@@ -104,7 +104,7 @@ static void print_right ()
 		"#[fg=colour241,bg=colour233,nobold,noitalics,nounderscore] \uE0B3 %s"
 		"#[fg=colour236,bg=colour233,nobold,noitalics,nounderscore] \uE0B2#[fg=colour247,bg=colour236,nobold,noitalics,nounderscore] %s"
 		"#[fg=colour241,bg=colour236,nobold,noitalics,nounderscore] \uE0B3"
-		"#[fg=colour252,bg=colour236,bold,noitalics,nounderscore] ⌚ %s"
+		"#[fg=colour252,bg=colour236,bold,noitalics,nounderscore] %s"
 		"#[fg=colour252,bg=colour236,nobold,noitalics,nounderscore] \uE0B2#[fg=colour16,bg=colour252,bold,noitalics,nounderscore] %s \n",
 		   uptime_buf, load_buf, day_buf, hour_buf, hostname_buf);
 }
