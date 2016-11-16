@@ -88,7 +88,7 @@ static void get_sys_load (char *buf, size_t s)
 
 static void print_right ()
 {
-	static char load_buf[12];
+	static char load_buf[64];
 	static char day_buf[11];
 	static char hour_buf[6];
 	static char hostname_buf[64];
@@ -98,7 +98,7 @@ static void print_right ()
 	get_current_day(day_buf, sizeof(day_buf));
 	get_current_hour_min(hour_buf, sizeof(hour_buf));
 	get_hostname(hostname_buf, sizeof(hostname_buf));
-	convert_seconds_to_readable_string(get_sys_uptime(), uptime_buf, sizeof(uptime_buf));
+	convert_seconds_to_readable_string((uint32_t) get_sys_uptime(), uptime_buf, sizeof(uptime_buf));
 
 	printf("#[fg=colour233,bg=default,nobold,noitalics,nounderscore] \uE0B2#[fg=colour22,bg=colour233,nobold,noitalics,nounderscore] ⇑  #[fg=colour247]%s"
 		"#[fg=colour241,bg=colour233,nobold,noitalics,nounderscore] \uE0B3 %s"
